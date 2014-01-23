@@ -1,0 +1,12 @@
+﻿Job Applicant Register Deployment Guide
+---------------------------------------
+
+1. Prerequisites: JDK 1.7 and Maven 3.x.
+
+2. Get project from Github at https://github.com/arialfred/job-applicant-register.
+
+3. Start command prompt and move to the project folder downloaded at previous step.
+
+4. Give command "mvn install". Wait that Maven builds the project, downloads and starts Tom EE application server and deploys the application to the server.
+
+5. Start web browser and go to address "http://localhost:8080/job-applicant-register/". Application supports Finnish and English languages. The language matching best to your browser settings is selected.

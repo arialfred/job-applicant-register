@@ -1,0 +1,33 @@
+﻿Job Applicant Register Technical Documentation
+----------------------------------------------
+
+General
+-------
+Job Applicant Register is a small web application demonstrating the core Java EE technologies like JSF, EJB and JPA. Purpose of the project is also to provide a robust and scalable starting point for larger projects.
+
+Application server
+------------------
+Application is designed to be compatible with any Java EE version 6 compatible application server. Web profile is enough, full support for Java EE 6 technology stack is not required. For demonstration purpose, plugin for latest Tom EE application server version 1.6.0 is included to the Maven project to download the server and to run the application.
+
+Database
+--------
+Application uses HSQLDB database built-in to the Tom EE application server. For larger projects, more mature database product (like MySQL, PostgreSQL, Oracle) would be used. But for that kind of small demo application, built-in database makes easy deployment possible.
+
+Technologies
+------------
+Application is developed using pure Java EE technologies provided by Java EE version 6:
+- JSF 2.1 along PrimeFaces 4.0 JSF component library. PrimeFaces (http://www.primefaces.org/) is a mature component library providing huge amount of useful components to build the user interface.
+- EJB 3.1 for business logic components. EJB container provides many useful services out of the box, transactions and authorization for example.
+- JPA 2.0 for data access layer. JPA provides a database independent way to access and store data.
+
+Instead of third party technologies like Spring and Vaadin, technologies included in Java EE technology stack are used so much as possible. Third party libraries are used when reasonable. That provides clean starting point, propably better maintainability and independency of third party support.
+
+Project structure and Maven
+---------------------------
+Application is so small and simple that it could be implemented as one-module web project (WAR). But the meaning of the project is to provide a scalable starting point for larger projects, so the project is divided to following modules:
+- EAR module: Main module collecting other modules together to EAR package deployable to application server.
+- WAR module: Web user interface. JSF 2.1 and PrimeFaces 4.0 are used. All user interface texts are located in separate files to make internationalization easier.
+- EJB module: Business logic services.
+- Model module (JAR): Contains classes representing data model of the application. Those classes can be used in other modules for example to transfer data between user interface and business logic layers.
+
+For Maven, there is a main project module including four modules as listed above. One of the benefit of using Maven is that it makes project IDE indepentend. For example, intelliJ IDEA and NetBeans can open Maven projects natively and for Eclipse based IDEs there are plugins available to support Maven projects.

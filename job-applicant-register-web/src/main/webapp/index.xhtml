@@ -1,79 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:ui="http://java.sun.com/jsf/facelets"
-   xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:h="http://java.sun.com/jsf/html"
-   template="/WEB-INF/templates/default.xhtml">
-   <ui:define name="content">
-      <h1>Welcome to JBoss AS 7!</h1>
-
-      <p>You have successfully deployed a Java EE 6 web application
-         on JBoss AS 7.</p>
-
-      <h:form id="reg">
-         <h2>Register (Bean Validation example)</h2>
-         <p>Enforces annotation-based constraints defined on the
-            model class.</p>
-         <table>
-            <tr>
-               <th style="text-align: right;"><h:outputLabel
-                     for="name" value="Name:" /></th>
-               <td><h:inputText id="name" value="#{newMember.name}" />
-                  <h:message for="name" errorClass="invalid" /></td>
-            </tr>
-            <tr>
-               <th style="text-align: right;"><h:outputLabel
-                     for="email" value="Email:" /></th>
-               <td><h:inputText id="email"
-                     value="#{newMember.email}" /> <h:message
-                     for="email" errorClass="invalid" /></td>
-            </tr>
-            <tr>
-               <th style="text-align: right;"><h:outputLabel
-                     for="phoneNumber" value="Phone #:" /></th>
-               <td><h:inputText id="phoneNumber"
-                     value="#{newMember.phoneNumber}" /> <h:message
-                     for="phoneNumber" errorClass="invalid" /></td>
-            </tr>
-         </table>
-         <p>
-            <h:commandButton id="register"
-               action="#{memberRegistration.register}" value="Register" />
-            <h:outputText value=" Registered!"
-               rendered="#{facesContext.postback and empty facesContext.messageList}"
-               style="color: green;" />
-         </p>
-      </h:form>
-      <h2>Members</h2>
-      <h:panelGroup rendered="#{empty members}">
-         <em>No registered members.</em>
-      </h:panelGroup>
-      <h:dataTable var="_member" value="#{members}"
-         rendered="#{not empty members}">
-         <h:column>
-            <f:facet name="header">Id</f:facet>
-                #{_member.id}
-            </h:column>
-         <h:column>
-            <f:facet name="header">Name</f:facet>
-                #{_member.name}
-            </h:column>
-         <h:column>
-            <f:facet name="header">Email</f:facet>
-                #{_member.email}
-            </h:column>
-         <h:column>
-            <f:facet name="header">Phone #</f:facet>
-                #{_member.phoneNumber}
-            </h:column>
-         <h:column>
-            <f:facet name="header">REST URL</f:facet>
-            <a href="#{request.contextPath}/rest/members/#{_member.id}">/rest/members/#{_member.id}</a>
-         </h:column>
-         <f:facet name="footer">
-                REST URL for all members: <a
-               href="#{request.contextPath}/rest/members">/rest/members</a>
-         </f:facet>
-      </h:dataTable>
-   </ui:define>
-</ui:composition>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+	
+	<f:loadBundle basename="fi.silvan.jobapplicantregister.web.i18n.Messages" var="messages" />
+	
+	<h:head>
+		<title>#{messages.application_title}</title>
+		<h:outputStylesheet library="css" name="stylesheet.css"/>
+	</h:head>
+	
+	<h:body>
+		<div class="ui-widget">
+			<h1 class="title ui-widget-header ui-corner-all">#{messages.application_title}</h1>
+			
+			<p:tabView id="tabView">
+				<p:tab id="tab1" title="#{messages.tab_register_job_applicant}">
+					<h:form id="formJobApplicant">
+						<p:messages id="messages" autoUpdate="true" closable="true" />
+						<p:panelGrid columns="2">
+							<h:outputLabel for="firstname" value="#{messages.registration_form_first_name}" />
+   							<p:inputText id="firstname" value="#{jobApplicantRegistration.jobApplicant.firstName}" label="Firstname" maxlength="40" style="width:98%" required="true" requiredMessage="#{messages.registration_form_first_name_error_missing}" />
+							
+							<h:outputLabel for="lastname" value="#{messages.registration_form_last_name}" />
+   							<p:inputText id="lastname" value="#{jobApplicantRegistration.jobApplicant.lastName}" required="true" requiredMessage="#{messages.registration_form_last_name_error_missing}" maxlength="40" style="width:98%" />
+    						
+							<h:outputLabel for="gender" value="#{messages.registration_form_gender}" />
+							<p:selectOneRadio id="gender" value="#{jobApplicantRegistration.jobApplicant.gender}" required="true" requiredMessage="#{messages.registration_form_gender_error_missing}">
+        						<f:selectItem itemLabel="#{messages.registration_form_gender_male}" itemValue="1" />
+        						<f:selectItem itemLabel="#{messages.registration_form_gender_female}" itemValue="2" />
+    						</p:selectOneRadio>
+    						
+							<h:outputLabel for="motive" value="#{messages.registration_form_motive}" />
+							<h:panelGroup>
+								<p:inputTextarea id="motive" value="#{jobApplicantRegistration.jobApplicant.motive}" maxlength="500" rows="5" cols="80" counter="counter" counterTemplate="#{messages.registration_form_motive_chars_left}" /><br />
+								<h:outputText id="counter" />
+							</h:panelGroup>
+							
+							<f:facet name="footer">
+								<p:commandButton type="submit" value="#{messages.registration_form_ok_button}" icon="ui-icon-check" action="#{jobApplicantRegistration.saveJobApplicant()}" update="formJobApplicant :registrationConfirmationDialog" />
+								<p:spacer width="5" height="0" />
+								<p:commandButton type="reset" value="#{messages.registration_form_clear_button}" icon="ui-icon-trash" />
+							</f:facet>
+						</p:panelGrid>
+						#{messages.registration_form_required_field}
+					</h:form>
+				</p:tab>
+        		
+				<p:tab id="tabListJobApplicants" title="#{messages.tab_list_job_applicants}">
+					<h:form id="formListJobApplicants">
+						<p:commandButton type="submit" value="#{messages.refresh_job_applicants_list_button}" icon="ui-icon-refresh" action="#{jobApplicantList.refreshJobApplicants()}" update="datatableJobApplicants" />
+						<div><p:spacer height="10" width="0" /></div>
+						<p:dataTable id="datatableJobApplicants" var="jobApplicant" value="#{jobApplicantList.jobApplicants}" emptyMessage="#{messages.job_applicant_list_empty}" resizableColumns="true">
+							<p:column headerText="#{messages.job_applicant_list_id}">#{jobApplicant.jobApplicantId}</p:column>
+							<p:column headerText="#{messages.job_applicant_list_first_name}">#{jobApplicant.firstName}</p:column>
+  							<p:column headerText="#{messages.job_applicant_list_last_name}">#{jobApplicant.lastName}</p:column>
+							<p:column headerText="#{messages.job_applicant_list_gender}">#{messages["job_applicant_list_gender_".concat(jobApplicant.gender)]}</p:column>
+							<p:column headerText="#{messages.job_applicant_list_motive}">#{jobApplicant.motive}</p:column>
+    					</p:dataTable>
+    				</h:form>
+				</p:tab>
+			</p:tabView>
+			
+			<p:dialog id="registrationConfirmationDialog" widgetVar="registrationConfirmationDialog" header="#{messages.registration_confirmation_dialog_title}" modal="true" closable="false" resizable="false">
+				<p>#{messages.registration_confirmation_dialog_info}</p>
+				<p>#{messages.registration_confirmation_dialog_first_name} #{jobApplicantRegistration.jobApplicantForConfirmationDialog.firstName}</p>
+				<p>#{messages.registration_confirmation_dialog_last_name} #{jobApplicantRegistration.jobApplicantForConfirmationDialog.lastName}</p>
+				<p>#{messages.registration_confirmation_dialog_gender} #{messages["registration_confirmation_dialog_gender_".concat(jobApplicantRegistration.jobApplicantForConfirmationDialog.gender)]}</p>
+				<p>#{messages.registration_confirmation_dialog_motive} #{jobApplicantRegistration.jobApplicantForConfirmationDialog.motive}</p>
+				<p:commandButton type="button" value="#{messages.registration_confirmation_dialog_ok_button}" icon="ui-icon-check" onclick="PF('registrationConfirmationDialog').hide()" />
+			</p:dialog>
+		</div>
+    </h:body>
+</html>
